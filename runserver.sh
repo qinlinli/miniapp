@@ -1,0 +1,1 @@
+python -m sanic gateway.app.app

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+{%- block basescript %}
+{%- endblock %}
+<head>
+    <script src="{{ url_for('static', filename='js/jquery-3.4.0.min.js') }}"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form id="form_send">
+    name:<input type="text" name="name"  size="100"/><br>
+    url:<input type="text" name="url"  size="100"/><br>
+    method:<input type="text" name="method" /><br>
+    AK:<input type="text" name="ak" size="100" /><br>
+    SK:<input type="text" name="sk" size="100" /><br>
+    params:<input type="text" name="params" size="100" /><br>
+    timestamp:<input type="text" name="timestamp" /><br>
+    <button type="button" class="send" content="/send">submit</button>
+    <button type="button" class="send" content="/send/create">save</button>
+    <div id="request-process-patent"></div>
+</form>
+
+
+</body>
+<script>
+    $('.send').click(function () {
+        var formObject = {};
+        var formArray =$("#form_send").serializeArray();
+        $.each(formArray,function(i,item){
+            formObject[item.name] = item.value;
+        });
+        var url = $(this).attr('content')
+       $.ajax({
+            type: 'post',
+            url: url,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(formObject),
+            dataType: "json",
+            success: function (message) {
+                console.log(message)
+                $("#request-process-patent").html(JSON.stringify(message));
+            },
+            error: function (message) {
+                $("#request-process-patent").html(message.responseJSON.error);
+            }
+        });
+    })
+
+</script>
+</html>
